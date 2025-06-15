@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import Sidebar from '../components/sidebar/Sidebar';
+import HomePage from "~/modules/home/HomePage.jsx";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +10,12 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Welcome />;
+  return (
+      <div style={{ display: 'flex' }}>
+        <Sidebar />
+        <main style={{ padding: '1rem', flex: 1 }}>
+          <HomePage />
+        </main>
+      </div>
+  );
 }
