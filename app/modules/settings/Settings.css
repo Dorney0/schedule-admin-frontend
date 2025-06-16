@@ -1,0 +1,193 @@
+/* Settings.css */
+.action-buttons {
+    display: flex;
+    gap: 8px; /* расстояние между кнопками */
+}
+
+.settings-select {
+    margin-bottom: 16px;
+    padding: 6px 10px;
+    font-size: 16px;
+    border-radius: 15px;
+}
+
+/* Таблица занимает всю ширину контейнера */
+.settings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Стили для заголовков */
+.settings-table th {
+    background-color: #f2f2f2;
+    padding: 8px;
+    border: 1px solid #ddd;
+    position: sticky; /* фиксируем заголовок при прокрутке */
+    top: 0;
+    z-index: 2;
+    text-align: left;
+}
+
+/* Стили для ячеек */
+.settings-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+/* Кнопки действий */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-buttons button {
+    padding: 6px 12px;
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.action-buttons button:hover {
+    background-color: #0056b3;
+}
+
+/* Кнопка Добавить */
+.settings-add-button {
+    margin-top: 12px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #28a745;
+    border: none;
+    color: white;
+    border-radius: 4px;
+}
+
+.settings-add-button:hover {
+    background-color: #218838;
+}
+
+/* Форма редактирования */
+.entity-form {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+.entity-form div {
+    margin-bottom: 12px;
+}
+
+.entity-form label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.entity-form input[type="text"] {
+    width: 100%;
+    padding: 6px 8px;
+    box-sizing: border-box;
+}
+
+.entity-form button {
+    margin-right: 8px;
+    padding: 6px 14px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+}
+
+.entity-form button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+}
+
+.entity-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.entity-form button[type="button"] {
+    background-color: #6c757d;
+    color: white;
+}
+
+.entity-form button[type="button"]:hover {
+    background-color: #5a6268;
+}
+
+.settings-container {
+    max-width: 900px; /* фиксируем максимально ширину */
+    margin: 0 auto; /* центрируем весь блок страницы */
+    padding: 10px;
+}
+
+.table-wrapper {
+    display: flex;
+    justify-content: center; /* центрируем таблицу */
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.add-button-wrapper {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-height: 90vh;
+    overflow-y: auto;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.refresh-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transform: translateY(-6px);
+    transition: transform 0.2s ease;
+}
+
+.refresh-button:hover {
+    transform: translateY(-6px) scale(1.1);
+}
+

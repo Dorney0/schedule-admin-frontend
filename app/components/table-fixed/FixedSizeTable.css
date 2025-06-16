@@ -1,0 +1,103 @@
+.table-wrapper {
+    width: 1000px;
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Таблица занимает всю ширину */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Контейнер без данных — центрируем содержимое по вертикали */
+.table-wrapper.empty {
+    justify-content: center;
+}
+
+/* Для пустого состояния делаем строку с сообщением по высоте контейнера */
+.table-wrapper.empty .table tbody tr td.empty {
+    height: 500px;     /* flex-контейнер */
+    justify-content: center; /* по горизонтали центр */
+    align-items: center;     /* по вертикали центр */
+    text-align: center;
+    padding: 0 20px;       /* отступы по бокам, чтобы текст не прилипал */
+}
+
+
+.table-wrapper:not(.empty) {
+    /* когда данные есть — приклеить к верху */
+    justify-content: flex-start;
+}
+.table thead {
+    /* Сделать thead фиксированной высоты */
+    flex-shrink: 0;
+}
+.table thead th {
+    border: 1px solid #ccc;
+    padding: 8px;
+    background-color: #fafafa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table thead th.actions {
+    width: 120px;
+}
+
+.table tbody td {
+    padding-top: 0px;
+    border: 1px solid #ccc;
+}
+
+.table tbody td.empty {
+    text-align: center;
+    padding: 20px;
+    height: 100%;
+}
+
+.table-wrapper.empty {
+    justify-content: center;
+}
+
+.table-wrapper.empty .table {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.table-wrapper.empty tbody {
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-wrapper.empty tbody tr {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-wrapper.empty tbody td.empty {
+    padding: 0;
+    height: auto;
+    text-align: center;
+    flex: 1;
+}
+
+.table-wrapper.empty tbody tr td.empty {
+    height: 100%;
+    display: flex;
+    justify-content: center; /* горизонтальное центрирование */
+    align-items: center;     /* вертикальное центрирование */
+    text-align: center;
+    padding: 0 20px;
+}
+

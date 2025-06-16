@@ -1,25 +1,26 @@
+export interface ScheduleItem {
+    id: number;
+    dayOfWeek: number;
+    lessonNumber: number;
+    durationMinutes: number;
+    className: string;
+    cabinetName: string;
+    subjectName: string;
+    employeeName: string;
+}
+
 const API_BASE = 'http://localhost:5252/api';
 
-// Определи интерфейс для элемента расписания
-export interface ScheduleItem {
-    day: string;
-    classroom: string;
-    subject: string;
+export async function getWeeklySchedule(): Promise<ScheduleItem[]> {
+    const res = await fetch(`${API_BASE}/Schedule`);
+    if (!res.ok) throw new Error('Failed to fetch schedule');
+    return await res.json();
 }
 
-// Функция возвращает Promise с массивом расписания
-export async function getWeeklySchedule(): Promise<ScheduleItem[]> {
-    const res = await fetch(`${API_BASE}/shedule`);
-    if (!res.ok) {
-        throw new Error('Failed to fetch schedule');
-    }
-    const data = await res.json();
-    return data as ScheduleItem[];
-}
 
 // Функция принимает данные расписания для обновления и возвращает обновленный массив
 export async function updateSchedule(data: ScheduleItem[]): Promise<ScheduleItem[]> {
-    const res = await fetch(`${API_BASE}/shedule`, {
+    const res = await fetch(`${API_BASE}/Schedule`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
