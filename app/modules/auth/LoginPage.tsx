@@ -19,13 +19,17 @@ export function LoginPage() {
     };
     const loginUser = async () => {
         try {
-            const res = await loginUserApi(login, password)
-            setAccessToken(res.data.accessToken)
-            console.log('✅ Успешный вход')
+            const trimmedLogin = login.trim();
+            const trimmedPassword = password.trim();
+
+            const res = await loginUserApi(trimmedLogin, trimmedPassword);
+            setAccessToken(res.data.accessToken);
+            console.log('✅ Успешный вход');
         } catch (err: any) {
-            console.error('❌ Ошибка входа:', err.response?.data || err.message)
+            console.error('❌ Ошибка входа:', err.response?.data || err.message);
         }
-    }
+    };
+
 
     // const getMe = async () => {
     //     try {
@@ -53,8 +57,10 @@ export function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button onClick={loginUser}>Войти</button>
-                <button onClick={register}>Зарегистрироваться</button>
+                <div className="auth-buttons">
+                    <button className="btn-login" onClick={loginUser}>Войти</button>
+                    <button className="btn-register" onClick={register}>Зарегистрироваться</button>
+                </div>
             </div>
 
             {/*<h2>Защищённый запрос</h2>*/}

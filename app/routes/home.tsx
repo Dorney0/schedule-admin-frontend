@@ -4,9 +4,10 @@ import HomePage from "~/modules/home/HomePage.jsx";
 //import UserProfile from "~/components/UserProfile/UserProfile";
 //import { useAuth } from "~/modules/auth/AuthContext";
 import {Navigate, useNavigate} from "react-router-dom";
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import {useAuth} from "~/modules/auth/AuthContext";
-
+import { getMe } from "~/api/auth"
+import UserProfile from "~/components/UserProfile/UserProfile";
 export function meta({}: Route.MetaArgs) {
     return [
         { title: "Home" },
@@ -16,6 +17,22 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
     const { accessToken } = useAuth();
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        if (!accessToken) return;
+
+        async function fetchUser() {
+            try {
+                const res = await getMe(accessToken);
+                setUser(res.data); // res.data должен содержать объект с полем fullName
+            } catch (error) {
+                console.error("Ошибка загрузки данных пользователя", error);
+            }
+        }
+
+        fetchUser();
+    }, [accessToken]);
 
     if (!accessToken) {
         return <Navigate to="/auth" replace />;
@@ -28,6 +45,7 @@ export default function Home() {
                     position: 'relative',
                     height: '56px',
                     padding: '0 16px',
+                    paddingBottom: '16px',
                     display: 'flex',
                     justifyContent: 'flex-end',
                     alignItems: 'center',
@@ -35,7 +53,7 @@ export default function Home() {
                     borderBottom: '1px solid #ddd'
                 }}
             >
-                {/* <UserProfile user={user} /> */}
+                <UserProfile user={user} />
             </header>
 
             <div style={{ display: 'flex', flex: 1 }}>
@@ -47,4 +65,3 @@ export default function Home() {
         </div>
     );
 }
-

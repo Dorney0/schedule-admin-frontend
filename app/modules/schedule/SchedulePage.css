@@ -1,33 +1,39 @@
 .schedule-container {
     padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
 }
 
 .schedule-title {
     font-size: 24px;
     margin-bottom: 16px;
     text-align: center;
+    color: black;
 }
 
 .schedule-button {
     padding: 8px 16px;
     font-size: 16px;
     margin-bottom: 12px;
-    background-color: #1976d2;
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .schedule-button:hover {
-    background-color: #125aa0;
+    background-color: #0056b3;
 }
 
 .schedule-table-wrapper {
     overflow: auto;
     max-height: 600px;
     border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
 .schedule-table {
@@ -45,19 +51,22 @@
 .schedule-table thead th {
     position: sticky;
     top: 0;
-    background-color: #f9f9f9;
+    background-color: #f0f0f0;
+    color: black;
     z-index: 11;
 }
+
 
 .sticky-column {
     position: sticky;
     left: 0;
-    background-color: #fff;
+    background-color: #f9f9f9;
     z-index: 10;
 }
 
 .day-cell {
     font-weight: bold;
+    color: black;
 }
 
 .schedule-table ul {
@@ -67,10 +76,29 @@
 
 .item-meta {
     font-size: 0.75em;
-    color: #555;
+    color: gray;
 }
 
 .empty-cell {
     color: #aaa;
     font-size: 0.9em;
+}
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
 }

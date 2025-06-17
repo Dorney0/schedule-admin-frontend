@@ -6,17 +6,29 @@ import { compareClassNames } from '../../utils/classSort';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SchedulePage.css';
+import { EditScheduleModal } from '~/components/modal/EditScheduleModal';
 
 const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
 
 function SchedulePage() {
     const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
+    const [selectedDay, setSelectedDay] = useState<string | null>(null);
+    const [selectedClass, setSelectedClass] = useState<string | null>(null);
     const tableRef = useRef<HTMLTableElement>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         getWeeklySchedule().then(setSchedule);
     }, []);
+
+    const handleCellClick = (day: string, className: string) => {
+        setSelectedDay(day);
+        setSelectedClass(className);
+    };
+    const reloadSchedule = async () => {
+        const updated = await getWeeklySchedule();
+        setSchedule(updated);
+    };
 
     const classNames = Array.from(new Set(schedule.map(item => item.className))).sort(compareClassNames);
 
@@ -37,12 +49,26 @@ function SchedulePage() {
 
     const captureTable = async () => {
         if (!tableRef.current) return;
-        const canvas = await html2canvas(tableRef.current);
+
+        const wrapper = tableRef.current.closest('.schedule-table-wrapper');
+        if (wrapper) {
+            wrapper.scrollTop = 0; // Прокручиваем вверх
+        }
+
+        // Ждём, пока DOM обновит прокрутку
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const canvas = await html2canvas(tableRef.current, {
+            scrollY: -window.scrollY // фикс для html2canvas, если нужна полная синхронность с окном
+        });
+
         const imgData = canvas.toDataURL('image/png');
         navigate('/print', { state: { imgData } });
     };
 
+
     return (
+
         <div className="schedule-container">
             <h1 className="schedule-title">Расписание на неделю</h1>
             <button onClick={captureTable} className="schedule-button">
@@ -63,8 +89,8 @@ function SchedulePage() {
                         <tr key={day}>
                             <td className="sticky-column day-cell">{day}</td>
                             {classNames.map(className => (
-                                <td key={className}>
-                                    {scheduleMap[day][className].length > 0 ? (
+                                <td key={className} onClick={() => handleCellClick(day, className)} style={{ cursor: 'pointer' }}>
+                                {scheduleMap[day][className].length > 0 ? (
                                         <ul>
                                             {scheduleMap[day][className]
                                                 .sort((a, b) => a.lessonNumber - b.lessonNumber)
@@ -85,6 +111,22 @@ function SchedulePage() {
                     </tbody>
                 </table>
             </div>
+            <EditScheduleModal
+                visible={!!selectedDay && !!selectedClass}
+                day={selectedDay ?? ''}
+                class={selectedClass ?? ''}
+                items={
+                    selectedDay && selectedClass
+                        ? scheduleMap[selectedDay][selectedClass]
+                        : []
+                }
+                onClose={() => {
+                    setSelectedDay(null);
+                    setSelectedClass(null);
+                    reloadSchedule();
+                }}
+            />
+
         </div>
     );
 }

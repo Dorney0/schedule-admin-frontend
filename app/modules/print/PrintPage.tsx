@@ -13,7 +13,7 @@ function PrintPage() {
         return (
             <div className="print-page__container">
                 <p>Нет изображения для печати.</p>
-                <button onClick={() => navigate(-1)}>Назад</button>
+                <button className="btn-back" onClick={() => navigate(-1)}>Назад</button>
             </div>
         );
     }
@@ -28,8 +28,8 @@ function PrintPage() {
                 alt="Скриншот расписания"
             />
             <div className="print-page__buttons">
-                <button onClick={() => window.print()}>Печать</button>
-                <button onClick={() => navigate(-1)}>Назад</button>
+                <button className="btn-print" onClick={() => window.print()}>Печать</button>
+                <button className="btn-back" onClick={() => navigate(-1)}>Назад</button>
             </div>
         </div>
     );

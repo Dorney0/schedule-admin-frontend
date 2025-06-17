@@ -1,7 +1,6 @@
-/* Settings.css */
 .action-buttons {
     display: flex;
-    gap: 8px; /* расстояние между кнопками */
+    gap: 8px;
 }
 
 .settings-select {
@@ -11,73 +10,78 @@
     border-radius: 15px;
 }
 
-/* Таблица занимает всю ширину контейнера */
 .settings-table {
-    width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
+    width: 100%;
 }
 
-/* Стили для заголовков */
 .settings-table th {
-    background-color: #f2f2f2;
+    background-color: #cce5ff;
     padding: 8px;
-    border: 1px solid #ddd;
-    position: sticky; /* фиксируем заголовок при прокрутке */
+    border: 1px solid #b8daff;
+    position: sticky;
     top: 0;
     z-index: 2;
     text-align: left;
+    color: #004085;
 }
 
-/* Стили для ячеек */
+.settings-table th,
 .settings-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-/* Кнопки действий */
-.action-buttons {
-    display: flex;
-    gap: 8px;
+    max-width: 50px !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
 }
 
 .action-buttons button {
     padding: 6px 12px;
-    border: 1px solid #007bff;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
     border-radius: 4px;
     font-size: 14px;
+    cursor: pointer;
+    border: none;
+    color: white;
     transition: background-color 0.3s ease;
 }
 
-.action-buttons button:hover {
+.action-buttons button.edit-button {
+    background-color: #007bff;
+}
+
+.action-buttons button.edit-button:hover {
     background-color: #0056b3;
 }
 
-/* Кнопка Добавить */
+.action-buttons button.delete-button {
+    background-color: #dc3545;
+}
+
+.action-buttons button.delete-button:hover {
+    background-color: #a71d2a;
+}
+
 .settings-add-button {
-    margin-top: 12px;
+    background-color: #28a745;
+    color: white;
     padding: 8px 16px;
     font-size: 16px;
-    cursor: pointer;
-    background-color: #28a745;
     border: none;
-    color: white;
     border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .settings-add-button:hover {
-    background-color: #218838;
+    background-color: #1e7e34;
 }
 
-/* Форма редактирования */
 .entity-form {
     margin-top: 20px;
     padding: 16px;
-    border: 1px solid #ddd;
+    border: 1px solid #b8daff;
     border-radius: 8px;
-    background-color: #fafafa;
+    background-color: #e9f7fe;
 }
 
 .entity-form div {
@@ -124,14 +128,14 @@
 }
 
 .settings-container {
-    max-width: 900px; /* фиксируем максимально ширину */
-    margin: 0 auto; /* центрируем весь блок страницы */
+    max-width: 900px;
+    margin: 0 auto;
     padding: 10px;
 }
 
 .table-wrapper {
     display: flex;
-    justify-content: center; /* центрируем таблицу */
+    justify-content: center;
     margin-top: 10px;
 }
 
@@ -141,8 +145,8 @@ th, td {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-width: 150px;
 }
-
 
 .add-button-wrapper {
     text-align: center;
@@ -190,4 +194,3 @@ th, td {
 .refresh-button:hover {
     transform: translateY(-6px) scale(1.1);
 }
-

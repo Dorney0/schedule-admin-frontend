@@ -87,7 +87,6 @@ function apiBaseUrl(entity: Entity): string {
     }
 }
 
-
 const SettingsPage: React.FC = () => {
     const [selectedEntity, setSelectedEntity] = useState<Entity>(ENTITIES[0]);
     const [items, setItems] = useState<EntityItem[]>([]);
@@ -105,10 +104,12 @@ const SettingsPage: React.FC = () => {
                     </td>
                 ))}
                 <td style={{ border: '1px solid #ccc', padding: '6px' }}>
+
                     <div className="action-buttons">
-                        <button onClick={() => startEdit(item)}>Изменить</button>
-                        <button onClick={() => deleteItem(item)}>Удалить</button>
+                        <button className="edit-button" onClick={() => startEdit(item)}>Изменить</button>
+                        <button className="delete-button" onClick={() => deleteItem(item)}>Удалить</button>
                     </div>
+
                 </td>
             </tr>
         );
