@@ -1,9 +1,8 @@
 import type { Route } from "./+types/home";
 import Sidebar from '../components/sidebar/Sidebar';
 import LoginPage from "~/modules/auth/LoginPage";
-import { useAuth } from "~/modules/auth/AuthContext";
-import type { User } from "~/modules/auth/AuthContext";
-import { useNavigate } from "react-router-dom";
+import {Navigate} from "react-router-dom";
+import {useAuth} from "~/modules/auth/AuthContext";
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -12,27 +11,18 @@ export function meta({}: Route.MetaArgs) {
     ];
 }
 
-export default function Auth() {
-    const { login } = useAuth();
-    const navigate = useNavigate();
-    type LoginData = {
-        token: string;
-        user: User;
-    };
+export default function AuthRoute() {
+    const { accessToken } = useAuth();
 
-    function handleLogin(user: User, token: string) {
-        console.log('Пользователь вошёл:', user.fullName);
-        login(user, token);
-        document.cookie = `token=${token}; path=/; max-age=3600`;
-        navigate("/");
+    if (accessToken) {
+        return <Navigate to="/" replace />;
     }
-
 
     return (
         <div style={{ display: 'flex' }}>
             <Sidebar />
             <main className="flex items-center justify-center min-h-screen p-4 flex-1 w-full">
-                <LoginPage onLogin={handleLogin}  onRegisterClick={() => navigate("/registration")}/>
+                <LoginPage />
             </main>
         </div>
     );

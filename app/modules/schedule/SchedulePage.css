@@ -1,0 +1,76 @@
+.schedule-container {
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.schedule-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.schedule-button {
+    padding: 8px 16px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.schedule-button:hover {
+    background-color: #125aa0;
+}
+
+.schedule-table-wrapper {
+    overflow: auto;
+    max-height: 600px;
+    border: 1px solid #ccc;
+}
+
+.schedule-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.schedule-table th,
+.schedule-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    vertical-align: top;
+}
+
+.schedule-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9;
+    z-index: 11;
+}
+
+.sticky-column {
+    position: sticky;
+    left: 0;
+    background-color: #fff;
+    z-index: 10;
+}
+
+.day-cell {
+    font-weight: bold;
+}
+
+.schedule-table ul {
+    margin: 0;
+    padding-left: 16px;
+}
+
+.item-meta {
+    font-size: 0.75em;
+    color: #555;
+}
+
+.empty-cell {
+    color: #aaa;
+    font-size: 0.9em;
+}

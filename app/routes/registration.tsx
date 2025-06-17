@@ -1,27 +1,28 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "~/modules/auth/AuthContext.js";
-import RegisterPage from "~/modules/auth/RegisterPage"; // если нужна авторизация
+import type { Route } from "./+types/home";
+import Sidebar from '../components/sidebar/Sidebar';
+import RegisterPage from "~/modules/auth/RegisterPage";
+import {Navigate} from "react-router-dom";
+import {useAuth} from "~/modules/auth/AuthContext";
 
-export default function Register() {
-    const navigate = useNavigate();
-    const { login } = useAuth(); // если надо
+export function meta({}: Route.MetaArgs) {
+    return [
+        { title: "Auth" },
+        { name: "description", content: "Welcome to Auth!" },
+    ];
+}
 
-    async function handleRegister(data: any) {
-        console.log("Регистрация пользователя:", data);
+export default function AuthRoute() {
+    const { accessToken } = useAuth();
 
-        // например, вызываем API регистрации
-        // const res = await fetch(...);
-
-        // если успешно — залогинить пользователя и перейти куда нужно
-        login(data);
-        navigate("/"); // или на нужный вам маршрут после успешной регистрации
-
+    if (accessToken) {
+        return <Navigate to="/" replace />;
     }
 
     return (
         <div style={{ display: 'flex' }}>
+            <Sidebar />
             <main className="flex items-center justify-center min-h-screen p-4 flex-1 w-full">
-                <RegisterPage onRegister={handleRegister} />
+                <RegisterPage />
             </main>
         </div>
     );

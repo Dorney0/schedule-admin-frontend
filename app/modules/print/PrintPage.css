@@ -1,0 +1,54 @@
+.print-page__container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.print-page__title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.print-page__image {
+    max-width: 100%;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.print-page__buttons {
+    margin-top: 20px;
+}
+
+.print-page__buttons button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #1976d2;
+    color: white;
+    border-radius: 4px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.print-page__buttons button:hover {
+    background-color: #125aa0;
+}
+
+/* Печать: оставить только изображение */
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+
+    #print-img {
+        visibility: visible !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+}

@@ -1,23 +1,23 @@
 import type { Route } from "./+types/home";
 import Sidebar from '../components/sidebar/Sidebar';
-import SchedulePage from '../modules/schedule/SchedulePage';
-import {Navigate} from "react-router-dom";
+import PrintPage from '../modules/print/PrintPage';
 import {useAuth} from "~/modules/auth/AuthContext";
-
+import {Navigate} from "react-router-dom";
+//import UserProfile from "~/components/UserProfile/UserProfile";
+//import { useAuth } from "~/modules/auth/AuthContext.js";
 export function meta({}: Route.MetaArgs) {
     return [
-        { title: "Schedule" },
+        { title: "Print" },
         { name: "description", content: "Welcome to Schedule!" },
     ];
 }
 
-export default function Schedule() {
+export default function Print() {
     const { accessToken } = useAuth();
 
     if (!accessToken) {
         return <Navigate to="/auth" replace />;
     }
-
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -41,7 +41,7 @@ export default function Schedule() {
                     <main
                         className="flex items-center justify-center p-4 flex-1 w-full"
                         style={{ paddingBottom: '500px' }}>
-                        <SchedulePage />
+                        <PrintPage />
                     </main>
 
             </div>
