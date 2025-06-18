@@ -49,7 +49,7 @@ input {
     cursor: pointer;
     transition: background-color 0.3s ease;
     color: white;
-    width: 100%; /* кнопки растягиваются на всю ширину контейнера */
+    width: 100%;
 }
 
 .btn-login {
@@ -84,7 +84,7 @@ pre {
 
 .registration-header h1 {
     margin: 0;
-    color: #333; /* основной цвет текста, можно заменить на ваш */
+    color: #333;
     font-size: 1.8rem;
 }
 

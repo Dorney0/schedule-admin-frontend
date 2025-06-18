@@ -54,7 +54,9 @@ export function LoginPage() {
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
                 />
-                <button onClick={register}>Зарегистрироваться</button>
+                <div className="auth-buttons">
+                <button onClick={register} className="btn-register">Зарегистрироваться</button>
+                </div>
             </div>
         </div>
     );
