@@ -145,7 +145,7 @@ th, td {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 150px;
+    max-width: 500px;
 }
 
 .add-button-wrapper {

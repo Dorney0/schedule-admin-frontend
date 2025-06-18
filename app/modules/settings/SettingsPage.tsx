@@ -179,13 +179,43 @@ const SettingsPage: React.FC = () => {
             url += `/${editingItem.id}`;
         }
 
+        // Преобразуем нужные поля к числам, если редактируем расписание
+        let dto: any = { ...editingItem };
+
+        if (selectedEntity === 'Schedule') {
+            const numberFields = ['employeeId', 'subjectId', 'cabinetId', 'classId', 'dayOfWeek', 'lessonNumber', 'durationMinutes', 'id'];
+            numberFields.forEach((field) => {
+                if (dto[field] !== undefined && dto[field] !== '') {
+                    dto[field] = Number(dto[field]);
+                } else {
+                    dto[field] = null;
+                }
+            });
+            dto.date = dto.date === '' ? null : dto.date;
+        }
+
+        const payload = { dto };
+
+        console.log('Отправляем на сервер:', method, url);
+        console.log('Данные:', payload);
+
         fetch(url, {
             method,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(editingItem),
+            body: JSON.stringify(payload),
         })
             .then(async (r) => {
-                if (!r.ok) throw new Error('Ошибка сохранения');
+                if (!r.ok) {
+                    let errorText = await r.text();
+                    try {
+                        const json = JSON.parse(errorText);
+                        console.error('Ошибка от сервера (json):', json);
+                        errorText = JSON.stringify(json, null, 2);
+                    } catch {
+                        console.error('Ошибка от сервера (текст):', errorText);
+                    }
+                    throw new Error(`Ошибка сохранения: ${r.status} ${r.statusText}\n${errorText}`);
+                }
                 const text = await r.text();
                 return text ? JSON.parse(text) : null;
             })
@@ -195,8 +225,12 @@ const SettingsPage: React.FC = () => {
                 setItems(data);
                 cancelEdit();
             })
-            .catch((err) => alert(err.message));
+            .catch((err) => {
+                console.error('Ошибка при сохранении:', err.message);
+                alert(err.message);
+            });
     }
+
 
     function deleteItem(item: EntityItem) {
         if (!item.id) {
