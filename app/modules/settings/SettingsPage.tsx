@@ -8,7 +8,9 @@ const ENTITIES = [
     'Cabinet', 'ChangeLog', 'Class', 'Curriculum', 'Employee',
     'Preference', 'Schedule', 'Subject', 'SubjectCabinet', 'SubjectEmployee'
 ] as const;
-
+interface FullEntityFormProps extends EntityFormProps {
+    fkData: Record<string, EntityItem[]>;
+}
 const ENTITY_SCHEMAS: Record<Entity, string[]> = {
     Cabinet: ['id', 'number', 'capacity'],
     ChangeLog: ['id', 'entity', 'changeType', 'description'],
@@ -35,6 +37,25 @@ const ENTITY_NAMES_RU: Record<Entity, string> = {
     SubjectEmployee: 'Предметы у сотрудников',
 };
 
+const FK_FIELDS: Record<Entity, Record<string, Entity>> = {
+    Cabinet: {},
+    ChangeLog: {},
+    Class: { employeeId: 'Employee' },
+    Curriculum: { subjectId: 'Subject', classId: 'Class' },
+    Employee: {},
+    Preference: { employeeId: 'Employee' },
+    Schedule: {
+        employeeId: 'Employee',
+        subjectId: 'Subject',
+        cabinetId: 'Cabinet',
+        classId: 'Class',
+    },
+    Subject: {},
+    SubjectCabinet: { subjectId: 'Subject', cabinetId: 'Cabinet' },
+    SubjectEmployee: { subjectId: 'Subject', employeeId: 'Employee' },
+};
+
+
 type Entity = typeof ENTITIES[number];
 type Mode = 'view' | 'add' | 'edit';
 
@@ -48,32 +69,56 @@ interface EntityFormProps {
     onCancel: () => void;
 }
 
-function EntityForm({ entity, currentItem, onChange, onSubmit, onCancel }: EntityFormProps) {
+const EntityForm: React.FC<FullEntityFormProps> = ({ entity, currentItem, onChange, onSubmit, onCancel, fkData }) => {
+    const fkFields = FK_FIELDS[entity] || {};
+
     return (
-        <form
-            className="entity-form"
-            onSubmit={(e: FormEvent) => {
-                e.preventDefault();
-                onSubmit();
-            }}
-        >
-            {Object.entries(currentItem).map(([key, value]) => (
-                <div key={key}>
-                    <label>{key}</label>
-                    <input
-                        type="text"
-                        value={value ?? ''}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(key, e.target.value)}
-                    />
-                </div>
-            ))}
+        <form className="entity-form" onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>
+            {Object.entries(currentItem).map(([key, value]) => {
+                const isRequired = key !== 'id';
+                const label = (
+                    <label style={{ color: isRequired ? 'red' : undefined }}>
+                        {isRequired ? '* ' : ''}{key}
+                    </label>
+                );
+
+                if (fkFields[key]) {
+                    const options = fkData[key] || [];
+                    return (
+                        <div key={key}>
+                            {label}
+                            <select
+                                value={value ?? ''}
+                                onChange={(e) => onChange(key, e.target.value)}
+                            >
+                                <option value="">-- выберите --</option>
+                                {options.map((opt: EntityItem) => (
+                                    <option key={opt.id} value={opt.id}>
+                                        {opt.title || opt.name || opt.fullName || opt.id}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div key={key}>
+                        {label}
+                        <input
+                            type="text"
+                            value={value ?? ''}
+                            onChange={(e) => onChange(key, e.target.value)}
+                        />
+                    </div>
+                );
+            })}
             <button type="submit">Сохранить</button>
-            <button type="button" onClick={onCancel}>
-                Отмена
-            </button>
+            <button type="button" onClick={onCancel}>Отмена</button>
         </form>
     );
 }
+
 
 function apiBaseUrl(entity: Entity): string {
     const apiHost = 'http://localhost:5252';
@@ -94,6 +139,24 @@ const SettingsPage: React.FC = () => {
     const [editingItem, setEditingItem] = useState<EntityItem | null>(null);
     const [mode, setMode] = useState<Mode>('view');
     const columns = ENTITY_SCHEMAS[selectedEntity];
+    const [fkData, setFkData] = useState<Record<string, EntityItem[]>>({});
+
+    useEffect(() => {
+        const fkFields = FK_FIELDS[selectedEntity] || {};
+        const entityNames = Object.values(fkFields);
+
+        Promise.all(
+            entityNames.map((ent) =>
+                fetch(apiBaseUrl(ent)).then((r) => r.json())
+            )
+        ).then((results) => {
+            const newFkData: Record<string, EntityItem[]> = {};
+            Object.entries(fkFields).forEach(([fieldKey, ent], index) => {
+                newFkData[fieldKey] = results[index];
+            });
+            setFkData(newFkData);
+        });
+    }, [selectedEntity]);
 
     function renderRow(item: EntityItem, i: number) {
         return (
@@ -158,7 +221,6 @@ const SettingsPage: React.FC = () => {
         }
     }
 
-
     function cancelEdit() {
         setEditingItem(null);
         setMode('view');
@@ -194,7 +256,7 @@ const SettingsPage: React.FC = () => {
             dto.date = dto.date === '' ? null : dto.date;
         }
 
-        const payload = { dto };
+        const payload = { ...dto };
 
         console.log('Отправляем на сервер:', method, url);
         console.log('Данные:', payload);
@@ -223,12 +285,14 @@ const SettingsPage: React.FC = () => {
             .then((r) => r.json())
             .then((data) => {
                 setItems(data);
+                console.log('Payload:', JSON.stringify(payload, null, 2));
                 cancelEdit();
             })
             .catch((err) => {
                 console.error('Ошибка при сохранении:', err.message);
                 alert(err.message);
             });
+
     }
 
 
@@ -314,6 +378,7 @@ const SettingsPage: React.FC = () => {
                             onChange={handleChange}
                             onSubmit={saveItem}
                             onCancel={cancelEdit}
+                            fkData={fkData}
                         />
                     </div>
                 </div>

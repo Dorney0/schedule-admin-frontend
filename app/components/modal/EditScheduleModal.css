@@ -60,3 +60,20 @@
     border-radius: 4px;
     cursor: pointer;
 }
+
+.btn-delete {
+    background: transparent;
+    border: none;
+    color: red;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 6px;
+    line-height: 1;
+    user-select: none;
+}
+
+.btn-delete:hover {
+    color: darkred;
+}
+

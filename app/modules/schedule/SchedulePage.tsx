@@ -1,13 +1,12 @@
-import { useEffect, useState, useRef } from 'react';
-import html2canvas from 'html2canvas';
-import { getWeeklySchedule } from '../../api/scheduleApi';
-import type { ScheduleItem } from '../../api/scheduleApi';
-import { compareClassNames } from '../../utils/classSort';
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './SchedulePage.css';
-import { EditScheduleModal } from '~/components/modal/EditScheduleModal';
+import html2canvas from 'html2canvas';
 
+import { getWeeklySchedule } from '../../api/scheduleApi';
+import type { ScheduleItem } from '~/types/types'
+import { compareClassNames } from '../../utils/classSort';
+import { EditScheduleModal } from '~/components/modal/EditScheduleModal';
+import './SchedulePage.css';
 const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
 
 function SchedulePage() {
@@ -25,6 +24,7 @@ function SchedulePage() {
         setSelectedDay(day);
         setSelectedClass(className);
     };
+
     const reloadSchedule = async () => {
         const updated = await getWeeklySchedule();
         setSchedule(updated);
@@ -55,24 +55,25 @@ function SchedulePage() {
             wrapper.scrollTop = 0; // Прокручиваем вверх
         }
 
-        // Ждём, пока DOM обновит прокрутку
         await new Promise(resolve => setTimeout(resolve, 100));
 
         const canvas = await html2canvas(tableRef.current, {
-            scrollY: -window.scrollY // фикс для html2canvas, если нужна полная синхронность с окном
+            scrollY: -window.scrollY,
         });
 
         const imgData = canvas.toDataURL('image/png');
         navigate('/print', { state: { imgData } });
     };
 
-
     return (
-
         <div className="schedule-container">
             <h1 className="schedule-title">Расписание на неделю</h1>
             <button onClick={captureTable} className="schedule-button">
                 Сделать скриншот таблицы
+            </button>
+            {/* Тут, например, кнопку обновления рядом добавим */}
+            <button onClick={reloadSchedule} className="schedule-button" style={{ marginLeft: 8 }}>
+                Обновить данные
             </button>
             <div className="schedule-table-wrapper">
                 <table ref={tableRef} className="schedule-table">
@@ -89,15 +90,23 @@ function SchedulePage() {
                         <tr key={day}>
                             <td className="sticky-column day-cell">{day}</td>
                             {classNames.map(className => (
-                                <td key={className} onClick={() => handleCellClick(day, className)} style={{ cursor: 'pointer' }}>
-                                {scheduleMap[day][className].length > 0 ? (
+                                <td
+                                    key={className}
+                                    onClick={() => handleCellClick(day, className)}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    {scheduleMap[day][className].length > 0 ? (
                                         <ul>
                                             {scheduleMap[day][className]
                                                 .sort((a, b) => a.lessonNumber - b.lessonNumber)
                                                 .map((item, idx) => (
                                                     <li key={idx}>
-                                                        <div><strong>{item.lessonNumber}.</strong> {item.subjectName}</div>
-                                                        <div className="item-meta">{item.employeeName}, {item.cabinetName}</div>
+                                                        <div>
+                                                            <strong>{item.lessonNumber}.</strong> {item.subjectName}
+                                                        </div>
+                                                        <div className="item-meta">
+                                                            {item.employeeName}, {item.cabinetName}
+                                                        </div>
                                                     </li>
                                                 ))}
                                         </ul>
@@ -115,18 +124,13 @@ function SchedulePage() {
                 visible={!!selectedDay && !!selectedClass}
                 day={selectedDay ?? ''}
                 class={selectedClass ?? ''}
-                items={
-                    selectedDay && selectedClass
-                        ? scheduleMap[selectedDay][selectedClass]
-                        : []
-                }
+                items={selectedDay && selectedClass ? scheduleMap[selectedDay][selectedClass] : []}
                 onClose={() => {
                     setSelectedDay(null);
                     setSelectedClass(null);
                     reloadSchedule();
                 }}
             />
-
         </div>
     );
 }

@@ -1,14 +1,5 @@
 import axios from 'axios';
-export interface ScheduleItem {
-    id: number;
-    dayOfWeek: number;
-    lessonNumber: number;
-    durationMinutes: number;
-    className: string;
-    cabinetName: string;
-    subjectName: string;
-    employeeName: string;
-}
+import type { ScheduleItem } from '../types/types';
 
 const API_BASE = 'http://localhost:5252/api';
 
