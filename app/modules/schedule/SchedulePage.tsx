@@ -7,6 +7,7 @@ import type { ScheduleItem } from '~/types/types'
 import { compareClassNames } from '../../utils/classSort';
 import { EditScheduleModal } from '~/components/modal/EditScheduleModal';
 import './SchedulePage.css';
+
 const dayNames = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
 
 function SchedulePage() {
@@ -65,16 +66,76 @@ function SchedulePage() {
         navigate('/print', { state: { imgData } });
     };
 
+    // Новая функция — скрин и отправка на утверждение
+    const sendForApproval = async () => {
+        if (!tableRef.current) {
+            alert('Таблица расписания не найдена');
+            return;
+        }
+
+        try {
+            const wrapper = tableRef.current.closest('.schedule-table-wrapper');
+            if (wrapper) {
+                wrapper.scrollTop = 0;
+            }
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            const canvas = await html2canvas(tableRef.current, {
+                scrollY: -window.scrollY,
+            });
+
+            // Получаем base64 из canvas
+            const imgData = canvas.toDataURL('image/png');
+
+            // TODO: Здесь логика отправки изображения на сервер.
+            // Пока для примера — просто POST с базовой информацией,
+            // backend должен уметь принять base64 или нужно доработать загрузку.
+
+            const requestBody = {
+                id: 0,
+                senderId: 1,   // TODO: заменить на ID текущего пользователя
+                receiverId: 2, // TODO: заменить на ID директора
+                status: 'submitted',
+                schedulePhotos: [imgData], // или лучше — URL после загрузки
+            };
+
+            const res = await fetch('http://localhost:5252/api/Requests', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody),
+            });
+
+            if (!res.ok) {
+                throw new Error(`Ошибка отправки: ${res.statusText}`);
+            }
+
+            alert('Расписание отправлено на утверждение директору');
+        } catch (err) {
+            alert(`Ошибка: ${(err as Error).message}`);
+            console.error(err);
+        }
+    };
+
     return (
         <div className="schedule-container">
             <h1 className="schedule-title">Расписание на неделю</h1>
+
             <button onClick={captureTable} className="schedule-button">
                 Сделать скриншот таблицы
             </button>
-            {/* Тут, например, кнопку обновления рядом добавим */}
             <button onClick={reloadSchedule} className="schedule-button" style={{ marginLeft: 8 }}>
                 Обновить данные
             </button>
+
+            <button
+                onClick={sendForApproval}
+                className="schedule-button send-approval-button"
+                title="Отправить расписание на утверждение директору"
+            >
+                Отправить на утверждение
+            </button>
+
+
             <div className="schedule-table-wrapper">
                 <table ref={tableRef} className="schedule-table">
                     <thead>
@@ -120,6 +181,7 @@ function SchedulePage() {
                     </tbody>
                 </table>
             </div>
+
             <EditScheduleModal
                 visible={!!selectedDay && !!selectedClass}
                 day={selectedDay ?? ''}
