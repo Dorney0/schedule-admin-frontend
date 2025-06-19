@@ -1,12 +1,11 @@
 import type { Route } from "./+types/home";
 import Sidebar from '../components/sidebar/Sidebar';
-import PrintPage from '../modules/print/PrintPage';
+import RequestPage from '../modules/request/RequestPage';
 import {useAuth} from "~/modules/auth/AuthContext";
 import {Navigate} from "react-router-dom";
 import UserProfile from "~/components/UserProfile/UserProfile";
 import {useEffect, useState} from "react";
 import {getMe} from "~/api/auth";
-
 export function meta({}: Route.MetaArgs) {
     return [
         { title: "Print" },
@@ -14,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
     ];
 }
 
-export default function Print() {
+export default function Request() {
     const { accessToken } = useAuth();
     const [user, setUser] = useState(null);
 
@@ -57,8 +56,8 @@ export default function Print() {
             <div style={{ display: 'flex', flex: 1 }}>
                 <Sidebar />
                 <main className="flex items-center justify-center p-4 flex-1 w-full">
-                        <PrintPage />
-                    </main>
+                    <RequestPage />
+                </main>
 
             </div>
         </div>

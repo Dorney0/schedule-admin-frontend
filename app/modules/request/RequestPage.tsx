@@ -1,9 +1,9 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './PrintPage.css';
 
-function PrintPage() {
+function RequestPage() {
     const location = useLocation();
+
     const navigate = useNavigate();
 
     // @ts-ignore
@@ -35,4 +35,4 @@ function PrintPage() {
     );
 }
 
-export default PrintPage;
+export default RequestPage;

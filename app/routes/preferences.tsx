@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
 import Sidebar from '../components/sidebar/Sidebar';
-import PrintPage from '../modules/print/PrintPage';
+import PreferencesPage from '../modules/references/PreferencesPage';
 import {useAuth} from "~/modules/auth/AuthContext";
 import {Navigate} from "react-router-dom";
 import UserProfile from "~/components/UserProfile/UserProfile";
@@ -14,9 +14,9 @@ export function meta({}: Route.MetaArgs) {
     ];
 }
 
-export default function Print() {
-    const { accessToken } = useAuth();
-    const [user, setUser] = useState(null);
+export default function Preferences() {
+    const { accessToken, user, setUser } = useAuth();
+
 
     useEffect(() => {
         if (!accessToken) return;
@@ -24,7 +24,7 @@ export default function Print() {
         async function fetchUser() {
             try {
                 const res = await getMe(accessToken);
-                setUser(res.data); // res.data должен содержать объект с полем fullName
+                setUser(res.data);
             } catch (error) {
                 console.error("Ошибка загрузки данных пользователя", error);
             }
@@ -32,6 +32,7 @@ export default function Print() {
 
         fetchUser();
     }, [accessToken]);
+
 
     if (!accessToken) {
         return <Navigate to="/auth" replace />;
@@ -57,8 +58,8 @@ export default function Print() {
             <div style={{ display: 'flex', flex: 1 }}>
                 <Sidebar />
                 <main className="flex items-center justify-center p-4 flex-1 w-full">
-                        <PrintPage />
-                    </main>
+                    <PreferencesPage />
+                </main>
 
             </div>
         </div>
